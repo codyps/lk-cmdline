@@ -50,14 +50,7 @@ impl<'a> Arg<'a> {
     }
 
     pub fn from_bytes(data: &'a [u8]) -> Self {
-        let eq_offs = data
-            .iter()
-            .copied()
-            .enumerate()
-            .find(|(_, v)| *v == b'=')
-            .map(|(i, _)| i)
-            .unwrap_or(data.len());
-
+        let eq_offs = memchr::memchr(b'=', data).unwrap_or(data.len());
         Self::with_eq_offs(data, eq_offs)
     }
 
